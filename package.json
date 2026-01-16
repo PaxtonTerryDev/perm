@@ -1,0 +1,25 @@
+{
+  "name": "<project_name>",
+  "version": "1.0.0",
+  "description": "<project_description>",
+  "main": "main.js",
+  "scripts": {
+    "dev": "tsx --watch src/main.ts",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaxtonTerryDev/<project_repo_name>.git"
+  },
+  "author": "PaxtonTerryDev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PaxtonTerryDev/<project_repo_name>/issues"
+  },
+  "homepage": "https://github.com/PaxtonTerryDev/<project_repo_name>#readme",
+  "devDependencies": {
+    "@types/node": "^25.0.9",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
