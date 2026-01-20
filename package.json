@@ -1,7 +1,7 @@
 {
-  "name": "<project_name>",
+  "name": "rpf",
   "version": "1.0.0",
-  "description": "<project_description>",
+  "description": "A general framework for integrating rbac systems to front end rendering",
   "main": "main.js",
   "scripts": {
     "dev": "tsx --watch src/main.ts",
