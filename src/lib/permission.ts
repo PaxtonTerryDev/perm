@@ -1,6 +1,6 @@
 export type Permission = "Create" | "Read" | "Update" | "Delete";
 
-type CRUDShorthand = `${"C" | ""}${"R" | ""}${"U" | ""}${"D" | ""}`
+export type CRUDShorthand = `${"C" | ""}${"R" | ""}${"U" | ""}${"D" | ""}`
 
 function parseShorthand(sh: CRUDShorthand): Permission[] {
   const p: Permission[] = [];
@@ -25,6 +25,7 @@ export class PermissionSet {
 
   constructor(initialPermissions: Permission[]);
   constructor(initialPermissions: CRUDShorthand);
+  constructor(initialPermissions: Permission[] | CRUDShorthand);
   constructor(initialPermissions: Permission[] | CRUDShorthand) {
     let permissions: Permission[];
     if (Array.isArray(initialPermissions)) permissions = initialPermissions;
@@ -37,6 +38,7 @@ export class PermissionSet {
 
   add(permission: Permission): void;
   add(permission: Permission[]): void;
+  add(permission: Permission | Permission[]): void;
   add(permission: Permission | Permission[]) {
     if (Array.isArray(permission)) {
       for (const p of permission) {
@@ -67,5 +69,9 @@ export class PermissionSet {
       }
     }
     return true;
+  }
+
+  toArray(): Permission[] {
+    return Array.from(this.permissions);
   }
 }
