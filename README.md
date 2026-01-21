@@ -19,12 +19,12 @@ RPF contains code that enforces serialization and permission assignments to any 
 
 At the core of RPF is the idea of "field-level" access.  Essentially, each piece of data that can be rendered in some front end component can have access broken down into the basic CRUD operations - 
 
-- Read: Is the user allowed to see the value?
-- Create: If the value is currently `undefined`, can a user instantiate that value?
-- Update: If the value **is not** `undefined`, can a user update that value?
-- Delete: If the value **is not** `undefined`, can a user delete the value? 
+- **Read**: Is the user allowed to see the value?
+- **Create**: If the value is currently `undefined`, can a user instantiate that value?
+- **Update**: If the value **is not** `undefined`, can a user update that value?
+- **Delete**: If the value **is not** `undefined`, can a user delete the value? 
 
-Breaking access down into the CRUD operations significantly reduces the amount of actions that need to be defined, and can lead to a more data-driven approach instead of relying on developer defined actions.
+Breaking access down into the CRUD operations significantly reduces the amount of actions that need to be defined, and leads to a more data-driven approach instead of relying on developer defined actions.
 
 A `Role` can then be assigned to have access to any of the above access operations.
 
@@ -53,7 +53,7 @@ interface ContactCardModelDataData {
     isActive: boolean;
 }
 ```
-_Note: The model must be comprised of serializable data. If you want to use more complicated structures, you will need to transform that data post-reception on the server / client._
+_Note: The model must be comprised of serializable / primitive data. If you want to use more complicated structures, you will need to transform that data post-reception on the server / client._
 
 Additionally, if your component will need any additional arguments in order to get the necessary data for the above 
 defined model, you should define a structure for that as well. This is optional.
@@ -66,7 +66,7 @@ interface ContactCardModelDataArgs {
 2. Define a new class that extends the abstract `Model` class, providing the above defined structures as arguments. 
 You can do this wherever you would like, as long as it is not in a component that will be delivered to the client.  
 
-`Model` requires you to implement two methods, `fund` and `map`. Both methods receive the optional object received as arguments. (In our example, defined as `ContactCardModelDataArgs`). Both methods are _**optionally async**_.
+`Model` requires you to implement two methods, `fund` and `map`. Both methods receive the optional object received as arguments. (In our example, defined as `ContactCardModelDataArgs`). Both methods are ***optionally async***.
 - `fund`: This is where you should perform necessary data fetching (like getting the data from the database). Must return a `ModelValues` structure, which is a valid instance of the model view defined earlier.
 - `map`: This is where you map the permissions onto the data structure itself. There are several helper methods to do this, which are explained later in [Mapping Roles](#Mapping Roles). Must return a `ModelPermissions` structure, which maps an array of permissions onto each property of the model view defined earlier.
 
@@ -87,42 +87,7 @@ class ContactCardModel extends Model<ContactCardModelData, ContactCardModelDataA
     // You can use some nifty helper methods to avoid writing a bunch of boilerplate
 
     const userRoles = await getUserRoles(userId);
-    this.rolePermissions<ContactCardModelData>({
-        firstName: this.roleMap(
-            ['Admin', "CRUD"],
-            ['User', "RU"],
-        );
-        lastName: this.roleMap(
-            ['Admin', "CRUD"],
-            ['User', "RU"],
-        );
-        phone: this.roleMap(
-            ['Admin', "CRUD"],
-            ['User', "RU"],
-        );
-        address: {
-            street: this.roleMap(
-                ['Admin', "CRUD"],
-                ['User', "R"],
-            );
-            city: this.roleMap(
-                ['Admin', "CRUD"],
-                ['User', "R"],
-            );
-            state: this.roleMap(
-                ['Admin', "CRUD"],
-                ['User', "R"],
-            );
-            zip:  this.roleMap(
-                ['Admin', "CRUD"],
-                ['User', "R"],
-            );        
-        };
-        isActive:  this.roleMap(
-            ['Admin', "CRUD"],
-            ['User', "R"],
-        );
-    })
+    
     
     return this.getPermissions(userRoles)
    }
