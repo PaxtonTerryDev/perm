@@ -1,5 +1,6 @@
-import type { Model } from "./lib/model";
-import { getPermissions } from "./lib/permission";
+import { Model, ModelEndpoints, ModelPermissions, ModelValues } from "./lib/model";
+import { createRolemap, ModelRolemap, RolePermissions } from "./lib/rolemap";
+import { objectMap } from "./lib/utils";
 
 interface Address {
   street: string;
@@ -18,33 +19,33 @@ interface UserModelData {
   address: Address;
 }
 
-const userResponse: Model<UserModelData, UserModelDataArgs> = {
-  firstName: {
-    value: "John",
-    permissions: ["Read", "Update"],
-  },
-  lastName: {
-    value: "Smith",
-    permissions: ["Read", "Update"],
-  },
-  age: {
-    value: 32,
-    permissions: ["Read"],
-  },
-  address: {
-    street: {
-      value: "123 Main Street",
-      permissions: ["Read", "Update"],
-    },
-    city: {
-      value: "Smallville",
-      permissions: ["Read"],
-    },
-    state: {
-      value: "Utah",
-      permissions: ["Read"],
-    },
-  },
-};
+class UserModel extends Model<UserModelData, UserModelDataArgs> {
+  url: ModelEndpoints = {
+    get: "/api/user",
+    patch: "/api/user"
+  }
 
+  adminRoles = new RolePermissions(["Admin", "CRUD"]);
+  userRoles = new RolePermissions(["User", "R"]);
+  defaultRolemap = createRolemap(this.adminRoles, this.userRoles);
+  
+  fund(_args: UserModelDataArgs): ModelValues<UserModelData> {
+    return {
+      firstName: "Bingus",
+      lastName: "Lingus",
+      age: 21,
+      address: {
+        street: "Bingus Street",
+        city: "Bingus City",
+        state: "Bingus State"
+      }
+    }
+  }
 
+  map(_args: UserModelDataArgs): ModelRolemap<UserModelData> {
+
+  }
+}
+
+const userModel = new UserModel();
+Promise.resolve(userModel.createViewModel({ userId: "1" }))
