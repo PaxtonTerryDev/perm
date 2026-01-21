@@ -7,14 +7,18 @@ interface Address {
   state: string;
 }
 
-interface User {
+interface UserModelDataArgs {
+  userId: string;
+}
+
+interface UserModelData {
   firstName: string;
   lastName: string;
   age: number;
   address: Address;
 }
 
-const userResponse: Model<User> = {
+const userResponse: Model<UserModelData, UserModelDataArgs> = {
   firstName: {
     value: "John",
     permissions: ["Read", "Update"],
