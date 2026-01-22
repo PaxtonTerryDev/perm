@@ -1,4 +1,4 @@
-import { objectJoin, objectMap } from "./utils/object-operations";
+import { objectJoin, objectMap } from "../utils/object-operations";
 
 /**
  * The value of a field can either be a singlur type, or an array.
@@ -89,19 +89,13 @@ export type ModelValues<T> = {
       : T[K];
 }
 
-export interface ModelEndpoints<T> {
-  get: (args: T) => string;
-  patch: (args: T) => string;
-}
-
 
 // Might be cool to do some kind of Redis caching of these objects, so we don't have to rebuild them each time.
-export abstract class Model<T extends {}, K extends unknown> {
+export abstract class Model<T, K> {
+  static server() 
   modelValues: ModelValues<T> | undefined;
   modelPermissions: ModelPermissions<T> | undefined;
   modelView: ModelExecutorView<T> | undefined;
-
-  abstract url: ModelEndpoints<K>;
 
   abstract defaultPermissions: ModelPermissions<T>;
   abstract fetch(args?: K): Promise<T> | T;
@@ -140,3 +134,4 @@ export abstract class Model<T extends {}, K extends unknown> {
     }) as ModelView<T>;
   }
 }
+
