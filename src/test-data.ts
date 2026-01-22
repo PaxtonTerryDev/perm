@@ -1,4 +1,4 @@
-import type { Permission } from "./lib/permission.ts";
+import type { Permission } from "./lib/model.ts";
 
 export type Role = "Admin" | "Editor" | "Viewer";
 
